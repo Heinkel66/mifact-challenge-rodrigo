@@ -1,0 +1,6 @@
+/* Forzar ocultamiento del banner de PrimeNG 18 */
+body > div:last-of-type,
+body > div[style*="z-index: 999999999"] {
+    display: none !important;
+    opacity: 0 !important;
+}

@@ -1,0 +1,25 @@
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f8f9fa;
+}
+.field {
+    display: flex;
+    flex-direction: column;
+}
+.mt-3 {
+    margin-top: 1rem;
+}
+.mt-4 {
+    margin-top: 1.5rem;
+}
+.w-full {
+    width: 100%;
+}
+.p-error {
+    color: #e24c4c;
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+}

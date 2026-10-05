@@ -1,0 +1,98 @@
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+<div style="padding: 2rem; max-width: 1200px; margin: 0 auto;">
+    <h2 style="color: #3b82f6; margin-bottom: 2rem; font-family: sans-serif;">Gestión de Inventario (MiFact)</h2>
+
+    <div style="display: flex; justify-content: space-between; margin-bottom: 1.5rem;">
+        <p-button severity="success" label="Nuevo Producto" icon="pi pi-plus" (onClick)="abrirNuevo()"></p-button>
+        <input pInputText type="text" (input)="onSearch($event)" placeholder="Buscar por nombre..."
+            style="width: 300px; padding: 0.75rem;" />
+    </div>
+
+    <!-- Tabla de Productos -->
+    <p-table [value]="productos" [rows]="10" [paginator]="true" [rowHover]="true" styleClass="p-datatable-gridlines">
+
+        <ng-template pTemplate="header">
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Cantidad</th>
+                <th>Precio (S/)</th>
+                <th style="text-align: center;">Acciones</th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-producto>
+            <tr>
+                <td>{{ producto.id }}</td>
+                <td><b>{{ producto.nombre }}</b></td>
+                <td>{{ producto.descripcion }}</td>
+                <td>{{ producto.cantidad }}</td>
+                <td>{{ producto.precio | number:'1.2-2' }}</td>
+
+                <td style="text-align: center; gap: 0.5rem; display: flex; justify-content: center;">
+                    <p-button icon="pi pi-pencil" [rounded]="true" [outlined]="true" severity="info"
+                        (onClick)="editarProducto(producto)">
+                    </p-button>
+                    <p-button icon="pi pi-trash" [rounded]="true" [outlined]="true" severity="danger"
+                        (onClick)="eliminarProducto(producto)">
+                    </p-button>
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="6" style="text-align: center; padding: 3rem;">
+                    No hay productos registrados en la base de datos.
+                </td>
+            </tr>
+        </ng-template>
+
+    </p-table>
+</div>
+
+<!-- Modal para Crear/Editar -->
+<p-dialog [(visible)]="productoDialog" [style]="{ width: '450px' }"
+    [header]="editando ? 'Editar Producto' : 'Nuevo Producto'" [modal]="true" styleClass="p-fluid">
+
+    <ng-template pTemplate="content">
+        <form [formGroup]="productoForm">
+
+            <div class="field mb-3">
+                <label for="nombre" class="font-bold">Nombre del Producto *</label>
+                <input type="text" pInputText id="nombre" formControlName="nombre" />
+                <small class="p-error"
+                    *ngIf="productoForm.get('nombre')?.invalid && productoForm.get('nombre')?.touched">
+                    El nombre es requerido.
+                </small>
+            </div>
+
+            <div class="field mb-3">
+                <label for="descripcion" class="font-bold">Descripción</label>
+                <textarea id="descripcion" pInputTextarea formControlName="descripcion" rows="3"></textarea>
+            </div>
+
+            <div class="formgrid grid mb-3" style="display: flex; gap: 1rem;">
+                <div class="field col" style="flex: 1;">
+                    <label for="precio" class="font-bold">Precio *</label>
+                    <p-inputNumber id="precio" formControlName="precio" mode="currency" currency="PEN"
+                        locale="es-PE"></p-inputNumber>
+                </div>
+                <div class="field col" style="flex: 1;">
+                    <label for="cantidad" class="font-bold">Cantidad *</label>
+                    <p-inputNumber id="cantidad" formControlName="cantidad"></p-inputNumber>
+                </div>
+            </div>
+
+        </form>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <p-button label="Cancelar" icon="pi pi-times" [text]="true" (onClick)="ocultarDialog()"></p-button>
+        <p-button label="Guardar" icon="pi pi-check" [text]="true" (onClick)="guardarProducto()"></p-button>
+    </ng-template>
+
+</p-dialog>
